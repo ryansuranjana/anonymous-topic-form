@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STIKOM Topic Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Urbanist&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              inter: ["Inter", "sans-serif"],
+              poppins: ["Poppins", "sans-serif"],
+              urbanist: ["Urbanist", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <div class="w-full h-screen flex items-center justify-center bg-gray-100">
+      <div class="flex flex-col items-center">
+        <h1 class="text-4xl font-bold font-inter">STIKOM Topic Form</h1>
+        <p class="font-urbanist text-center mt-4">
+          Speak your mind anonymously
+        </p>
+        <a
+          href="{{ url_for('login') }}"
+          class="h-12 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF] rounded-md mt-8 flex items-center"
+          >Get Started <i data-lucide="arrow-right"></i
+        ></a>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
