@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STIKOM Topic Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Urbanist&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              inter: ["Inter", "sans-serif"],
+              poppins: ["Poppins", "sans-serif"],
+              urbanist: ["Urbanist", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <div class="w-[60%] mx-auto py-8">
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold font-inter">Create Topic</h1>
+        <div class="flex items-center space-x-4">
+          <a
+            href="{{ url_for('topics') }}"
+            class="h-12 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
+            ><i data-lucide="arrow-left"></i
+          ></a>
+        </div>
+      </div>
+
+      <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="flex flex-col space-y-4">
+          <div class="grid grid-cols-2 gap-4 mb-2">
+            <div class="flex flex-col space-y-2">
+              {{ form.title.label() }} {{ form.title(class="w-full border-black
+              border-2 p-2.5 focus:outline-none
+              focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6]
+              active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md",
+              placeholder="Topic Title") }}
+            </div>
+            <div class="flex flex-col space-y-2">
+              {{ form.tags.label() }} {{ form.tags(class="w-full border-black
+              border-2 p-2.5 focus:outline-none
+              focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6]
+              active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md",
+              placeholder="Example: AI, Web Development, Data Science") }}
+            </div>
+          </div>
+          <div class="flex flex-col space-y-2">
+            {{ form.description.label() }} {{ form.description(class="w-full
+            border-black border-2 p-2.5 focus:outline-none
+            focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6]
+            active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md",
+            placeholder="Topic Description") }}
+          </div>
+        </div>
+        {{ form.submit(class="mt-8 h-12 border-black border-2 p-2.5 bg-[#A6FAFF]
+        hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)]
+        active:bg-[#00E1EF] rounded-md block text-center w-full") }}
+      </form>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

@@ -3,9 +3,102 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Topic</title>
+    <title>STIKOM Topic Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Urbanist&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              inter: ["Inter", "sans-serif"],
+              poppins: ["Poppins", "sans-serif"],
+              urbanist: ["Urbanist", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
   </head>
   <body>
-    <h1>Hello World</h1>
+    <div class="w-[80%] mx-auto py-8">
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold font-inter">STIKOM Topic Form</h1>
+        <div class="flex items-center space-x-4">
+          <a
+            href="{{ url_for('create_topic')}}"
+            class="h-12 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF] rounded-md"
+          >
+            Create Topic
+          </a>
+          <a
+            href=""
+            class="h-12 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
+            ><i data-lucide="log-out"></i
+          ></a>
+        </div>
+      </div>
+
+      <form
+        class="my-6 w-full flex items-center justify-center"
+        action="{{ url_for('topics') }}"
+        method="get"
+      >
+        <input
+          type="text"
+          name="search"
+          class="w-96 border-black border-2 p-2.5 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md"
+          placeholder="Search topics..."
+          value="{{ request.args.get('search', '') }}"
+        />
+        <button
+          type="submit"
+          class="h-12 ml-2 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
+        >
+          <i data-lucide="search"></i>
+        </button>
+      </form>
+
+      <div class="grid grid-cols-3 gap-4">
+        {% for topic in topics %}
+        <div
+          class="h-full border-black border-2 rounded-md hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] bg-white"
+        >
+          <a href="" class="block cursor-pointer">
+            <article class="w-full h-full">
+              <div class="px-6 py-5 text-left h-full">
+                <p class="text-sm mb-4">
+                  {% for tag in topic.tags %}
+                  <span>#{{ tag.name }}</span>
+                  {% endfor %}
+                </p>
+                <h1 class="text-3xl mb-4 font-inter">{{ topic.title }}</h1>
+                <p class="text-xs mb-8 line-clamp-4 font-urbanist">
+                  {{ topic.description }}
+                </p>
+                <a
+                  href=""
+                  class="h-12 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF] rounded-md"
+                  >Discussion</a
+                >
+              </div>
+            </article>
+          </a>
+        </div>
+        {% else %}
+        <div class="col-span-3 flex items-center justify-center h-64">
+          <p class="text-gray-500 text-lg">No topics found.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
   </body>
 </html>
