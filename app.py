@@ -94,6 +94,12 @@ def create_topic():
     
     return render_template('topic/create.html', form=form)
 
+@app.route('/topics/<int:topic_id>', methods=['GET'])
+@login_required
+def topic_discussion(topic_id):
+    topic = Topic.query.get_or_404(topic_id)
+    return render_template('topic/discussion.html', topic=topic)
+
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

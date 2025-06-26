@@ -10,4 +10,23 @@ class Topic(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
     
-    tags = db.relationship('Tag', backref='topic', lazy=True, cascade='all, delete-orphan')
+    tags = db.relationship(
+        'Tag',
+        backref='topic',
+        lazy=True,
+        cascade='all, delete-orphan'
+    )
+    
+    discussions = db.relationship(
+        'Discussion',
+        back_populates='topic',
+        lazy=True,
+        cascade='all, delete-orphan'
+    )
+
+    discussion_users = db.relationship(
+        'DiscussionUser',
+        back_populates='topic',
+        lazy=True,
+        cascade='all, delete-orphan'
+    )

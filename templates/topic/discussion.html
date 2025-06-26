@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STIKOM Topic Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Urbanist&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              inter: ["Inter", "sans-serif"],
+              poppins: ["Poppins", "sans-serif"],
+              urbanist: ["Urbanist", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <div class="w-[70%] mx-auto py-8 relative min-h-screen">
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold font-inter">Topic</h1>
+        <div class="flex items-center space-x-4">
+          <a
+            href="{{ url_for('topics') }}"
+            class="h-12 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
+            ><i data-lucide="arrow-left"></i
+          ></a>
+        </div>
+      </div>
+
+      <div class="w-[80%] mx-auto mb-8">
+        <h2 class="text-2xl font-bold font-inter mb-4">{{ topic.title }}</h2>
+        <p class="text-gray-700 mb-4 font-urbanist">{{ topic.description }}</p>
+      </div>
+
+      <div
+        class="w-full h-full border-black border-2 rounded-md hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] bg-white"
+      >
+        <div href="" class="block cursor-pointer">
+          <article class="w-full h-full">
+            <div class="w-full h-1/2 border-black border-b-2 px-2 py-4">
+              <p class="font-bold">Discussion</p>
+            </div>
+            <div
+              class="flex-1 overflow-y-auto space-y-4 p-4"
+              style="max-height: 400px"
+            >
+              <div class="flex items-start mb-4">
+                <div
+                  class="max-w-[70%] bg-gray-100 p-3 rounded-xl border-2 border-black"
+                >
+                  <p class="text-sm font-bold">user-id-123456</p>
+                  <div
+                    class="flex items-center justify-between text-xs text-gray-500 mb-1"
+                  >
+                    <span>18.18</span>
+                  </div>
+                  <p class="text-sm font-urbanist">
+                    discussions text from another user dskfjaskjfd
+                    saskdfjbaskdfbas fkasjdfkasdf asdkfbasdj adksjfaskdf
+                    asdkfaskfjads faskdjfkasf asdkfjbasdkfasd fkasdjfbasdf
+                    dfkasfdkasdf ksfjasdkfasd dfkasdjfbsadksbfd dskfjasbfsdf
+                    asdfksdfj
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start mb-4">
+                <div
+                  class="max-w-[70%] bg-gray-100 p-3 rounded-xl border-2 border-black"
+                >
+                  <p class="text-sm font-bold">user-id-123456</p>
+                  <div
+                    class="flex items-center justify-between text-xs text-gray-500 mb-1"
+                  >
+                    <span>18.18</span>
+                  </div>
+                  <p class="text-sm font-urbanist">
+                    discussions text from another user dskfjaskjfd
+                    saskdfjbaskdfbas fkasjdfkasdf asdkfbasdj adksjfaskdf
+                    asdkfaskfjads faskdjfkasf asdkfjbasdkfasd fkasdjfbasdf
+                    dfkasfdkasdf ksfjasdkfasd dfkasdjfbsadksbfd dskfjasbfsdf
+                    asdfksdfj
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start mb-4">
+                <div
+                  class="max-w-[70%] bg-gray-100 p-3 rounded-xl border-2 border-black"
+                >
+                  <p class="text-sm font-bold">user-id-123456</p>
+                  <div
+                    class="flex items-center justify-between text-xs text-gray-500 mb-1"
+                  >
+                    <span>18.18</span>
+                  </div>
+                  <p class="text-sm font-urbanist">
+                    discussions text from another user dskfjaskjfd
+                    saskdfjbaskdfbas fkasjdfkasdf asdkfbasdj adksjfaskdf
+                    asdkfaskfjads faskdjfkasf asdkfjbasdkfasd fkasdjfbasdf
+                    dfkasfdkasdf ksfjasdkfasd dfkasdjfbsadksbfd dskfjasbfsdf
+                    asdfksdfj
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start justify-end mb-4">
+                <div
+                  class="max-w-[70%] bg-[#A6FAFF] p-3 rounded-xl border-2 border-black text-right"
+                >
+                  <p class="text-sm font-bold">user-id-654321</p>
+                  <div
+                    class="flex items-center justify-between text-xs text-gray-500 mb-1"
+                  >
+                    <span class="ml-auto">18.19</span>
+                  </div>
+                  <p class="text-sm font-urbanist">
+                    discussions text from another user dskfjaskjfd
+                    saskdfjbaskdfbas fkasjdfkasdf asdkfbasdj adksjfaskdf
+                    asdkfaskfjads faskdjfkasf asdkfjbasdkfasd fkasdjfbasdf
+                    dfkasfdkasdf ksfjasdkfasd dfkasdjfbsadksbfd dskfjasbfsdf
+                    asdfksdfj
+                  </p>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="absolute bottom-14 left-0 right-0 flex justify-center">
+        <div class="flex items-center space-x-2">
+          <input
+            class="w-[500px] border-black border-2 p-2.5 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md"
+            placeholder="you@example.com"
+          />
+          <div
+            class="h-12 ml-2 border-black border-2 p-2.5 bg-[#FFA6F6] hover:bg-[#FF79E6] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#FF00C8]"
+          >
+            <i data-lucide="file"></i>
+          </div>
+          <button
+            type="submit"
+            class="h-12 ml-2 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
+          >
+            <i data-lucide="send"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
