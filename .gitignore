@@ -1,2 +1,4 @@
 .env
 venv
+key.pem
+cert.pem

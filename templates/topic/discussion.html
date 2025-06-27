@@ -22,6 +22,7 @@
         },
       };
     </script>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
   </head>
   <body>
     <div class="w-[70%] mx-auto py-8 relative min-h-screen">
@@ -51,113 +52,159 @@
             </div>
             <div
               class="flex-1 overflow-y-auto space-y-4 p-4"
+              id="discussion-container"
               style="max-height: 400px"
-            >
-              <div class="flex items-start mb-4">
-                <div
-                  class="max-w-[70%] bg-gray-100 p-3 rounded-xl border-2 border-black"
-                >
-                  <p class="text-sm font-bold">user-id-123456</p>
-                  <div
-                    class="flex items-center justify-between text-xs text-gray-500 mb-1"
-                  >
-                    <span>18.18</span>
-                  </div>
-                  <p class="text-sm font-urbanist">
-                    discussions text from another user dskfjaskjfd
-                    saskdfjbaskdfbas fkasjdfkasdf asdkfbasdj adksjfaskdf
-                    asdkfaskfjads faskdjfkasf asdkfjbasdkfasd fkasdjfbasdf
-                    dfkasfdkasdf ksfjasdkfasd dfkasdjfbsadksbfd dskfjasbfsdf
-                    asdfksdfj
-                  </p>
-                </div>
-              </div>
-              <div class="flex items-start mb-4">
-                <div
-                  class="max-w-[70%] bg-gray-100 p-3 rounded-xl border-2 border-black"
-                >
-                  <p class="text-sm font-bold">user-id-123456</p>
-                  <div
-                    class="flex items-center justify-between text-xs text-gray-500 mb-1"
-                  >
-                    <span>18.18</span>
-                  </div>
-                  <p class="text-sm font-urbanist">
-                    discussions text from another user dskfjaskjfd
-                    saskdfjbaskdfbas fkasjdfkasdf asdkfbasdj adksjfaskdf
-                    asdkfaskfjads faskdjfkasf asdkfjbasdkfasd fkasdjfbasdf
-                    dfkasfdkasdf ksfjasdkfasd dfkasdjfbsadksbfd dskfjasbfsdf
-                    asdfksdfj
-                  </p>
-                </div>
-              </div>
-              <div class="flex items-start mb-4">
-                <div
-                  class="max-w-[70%] bg-gray-100 p-3 rounded-xl border-2 border-black"
-                >
-                  <p class="text-sm font-bold">user-id-123456</p>
-                  <div
-                    class="flex items-center justify-between text-xs text-gray-500 mb-1"
-                  >
-                    <span>18.18</span>
-                  </div>
-                  <p class="text-sm font-urbanist">
-                    discussions text from another user dskfjaskjfd
-                    saskdfjbaskdfbas fkasjdfkasdf asdkfbasdj adksjfaskdf
-                    asdkfaskfjads faskdjfkasf asdkfjbasdkfasd fkasdjfbasdf
-                    dfkasfdkasdf ksfjasdkfasd dfkasdjfbsadksbfd dskfjasbfsdf
-                    asdfksdfj
-                  </p>
-                </div>
-              </div>
-              <div class="flex items-start justify-end mb-4">
-                <div
-                  class="max-w-[70%] bg-[#A6FAFF] p-3 rounded-xl border-2 border-black text-right"
-                >
-                  <p class="text-sm font-bold">user-id-654321</p>
-                  <div
-                    class="flex items-center justify-between text-xs text-gray-500 mb-1"
-                  >
-                    <span class="ml-auto">18.19</span>
-                  </div>
-                  <p class="text-sm font-urbanist">
-                    discussions text from another user dskfjaskjfd
-                    saskdfjbaskdfbas fkasjdfkasdf asdkfbasdj adksjfaskdf
-                    asdkfaskfjads faskdjfkasf asdkfjbasdkfasd fkasdjfbasdf
-                    dfkasfdkasdf ksfjasdkfasd dfkasdjfbsadksbfd dskfjasbfsdf
-                    asdfksdfj
-                  </p>
-                </div>
-              </div>
-            </div>
+            ></div>
           </article>
         </div>
       </div>
 
       <div class="absolute bottom-14 left-0 right-0 flex justify-center">
-        <div class="flex items-center space-x-2">
-          <input
-            class="w-[500px] border-black border-2 p-2.5 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md"
-            placeholder="you@example.com"
-          />
-          <div
-            class="h-12 ml-2 border-black border-2 p-2.5 bg-[#FFA6F6] hover:bg-[#FF79E6] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#FF00C8]"
-          >
-            <i data-lucide="file"></i>
+        <form id="message-form">
+          <div class="flex items-center space-x-2">
+            <input
+              class="w-[500px] border-black border-2 p-2.5 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md"
+              id="message-input"
+            />
+            <div
+              class="h-12 ml-2 border-black border-2 p-2.5 bg-[#FFA6F6] hover:bg-[#FF79E6] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#FF00C8]"
+            >
+              <i data-lucide="file"></i>
+            </div>
+            <button
+              type="submit"
+              class="h-12 ml-2 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
+            >
+              <i data-lucide="send"></i>
+            </button>
           </div>
-          <button
-            type="submit"
-            class="h-12 ml-2 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
-          >
-            <i data-lucide="send"></i>
-          </button>
-        </div>
+        </form>
       </div>
     </div>
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
       lucide.createIcons();
+    </script>
+
+    <script>
+      const socket = io({
+        transports: ["websocket"],
+      });
+
+      const topicId = "{{ topic.id }}";
+      const userId = "{{ user.id }}";
+
+      socket.emit("join", { topic_id: topicId });
+
+      socket.emit("fetch_messages", { topic_id: topicId });
+
+      socket.on("all_messages", (grouped) => {
+        const data = Object.entries(grouped).map(([date, messages]) => {
+          return {
+            date: date,
+            messages: messages.map((msg) => ({
+              isRight: msg.user_id == userId,
+              message: msg.message,
+              image_url: msg.image_url,
+              code_hash: msg.code_hash,
+              created_at: msg.created_at,
+            })),
+          };
+        });
+
+        data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        const discussionContainer = document.getElementById(
+          "discussion-container"
+        );
+        discussionContainer.innerHTML = "";
+
+        let lastMessageEl = null;
+
+        data.forEach((item) => {
+          item.messages.forEach((msg) => {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = `flex items-start mb-4 ${
+              msg.isRight ? "justify-end" : ""
+            }`;
+
+            messageDiv.innerHTML = `
+        <div class="max-w-[70%] min-w-[20%] bg-gray-100 p-3 rounded-xl border-2 border-black">
+          <p class="text-sm font-bold">${msg.code_hash}</p>
+          <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+            <span>${msg.created_at}</span>
+          </div>
+          ${
+            msg.message
+              ? `<p class="text-sm font-urbanist">${msg.message}</p>`
+              : ""
+          }
+          ${
+            msg.image_url
+              ? `<img src="${msg.image_url}" class="mt-2 max-w-full rounded" />`
+              : ""
+          }
+        </div>
+      `;
+
+            discussionContainer.appendChild(messageDiv);
+            lastMessageEl = messageDiv;
+          });
+        });
+
+        requestAnimationFrame(() => {
+          if (lastMessageEl) {
+            lastMessageEl.scrollIntoView({ behavior: "smooth", block: "end" });
+          }
+        });
+      });
+
+      socket.on("receive_message", (data) => {
+        const discussionContainer = document.getElementById(
+          "discussion-container"
+        );
+
+        console.log(data);
+
+        discussionContainer.innerHTML += `
+          <div class="flex items-start mb-4 ${
+            data.user_id == userId ? "justify-end" : ""
+          }">
+                  <div
+                    class="max-w-[70%] min-w-[20%] bg-gray-100 p-3 rounded-xl border-2 border-black"
+                  >
+                    <p class="text-sm font-bold">${data.code_hash}</p>
+                    <div
+                      class="flex items-center justify-between text-xs text-gray-500 mb-1"
+                    >
+                      <span>${data.created_at}</span>
+                    </div>
+                    <p class="text-sm font-urbanist">
+                      ${data.message}
+                    </p>
+                  </div>
+                </div>
+        `;
+
+        discussionContainer.scrollTop = discussionContainer.scrollHeight;
+      });
+
+      const form = document.getElementById("message-form");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const message = document.getElementById("message-input").value;
+
+        const data = {
+          topic_id: topicId,
+          message: message,
+        };
+
+        socket.emit("send_message", data);
+
+        document.getElementById("message-input").value = "";
+      });
     </script>
   </body>
 </html>
