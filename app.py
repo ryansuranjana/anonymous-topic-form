@@ -19,9 +19,15 @@ from models.discussion import Discussion
 from models.discussion_user import DiscussionUser
 from werkzeug.utils import secure_filename
 import os
+import base64
+import uuid
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+ALLOWED_EXTENSIONS = {'.jpg', '.png', '.pdf', '.docx'}
+MAX_FILE_SIZE_MB = 5
 
 load_dotenv()
 
@@ -125,7 +131,7 @@ def fetch_messages(data):
             grouped[date_key] = []
         grouped[date_key].append({
             'message': d.message,
-            'image_url': d.image_url,
+            'file': d.file,
             'user_id': d.discussion_user.user_id,
             'code_hash': d.discussion_user.code_hash,
             'created_at': d.created_at.strftime("%H:%M")
@@ -137,39 +143,58 @@ def fetch_messages(data):
 def send_message(data):
     topic_id = data['topic_id']
     content = data.get('message')
-    # image_file = data.get('image')
+    file_data = data.get('file_data')
+    file_name = data.get('file_name')
 
     discussion_user = DiscussionUser.query.filter_by(user_id=current_user.id, topic_id=topic_id).first()
     if not discussion_user:
         discussion_user = DiscussionUser(
             user_id=current_user.id,
             topic_id=topic_id,
-            code_hash=f"USR{current_user.id:04d}"
+            code_hash=f"usr{current_user.id:04d}"
         )
         db.session.add(discussion_user)
         db.session.commit()
 
-    image_url = None
-    if 'image_file' in request.files:
-        image = request.files['image_file']
-        if image.filename != '':
-            filename = secure_filename(image.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            image.save(filepath)
-            image_url = url_for('static', filename=f'uploads/{filename}')
+    file_url = None
+    if file_data and file_name:
+        header, encoded = file_data.split(',', 1)
+        binary_data = base64.b64decode(encoded)
+        
+        filename = secure_filename(file_name)
+        name, ext = os.path.splitext(filename)
+
+        if ext not in ALLOWED_EXTENSIONS:
+            emit('message_error', {'error': 'Unsupported file formats (only .jpg, .png, .pdf, .docx)'}, to=request.sid)
+            return
+        
+        file_size_mb = len(binary_data) / (1024 * 1024)
+        if file_size_mb > MAX_FILE_SIZE_MB:
+            emit('message_error', {'error': 'File size exceeds 5MB'}, to=request.sid)
+            return
+
+        unique_suffix = uuid.uuid4().hex[:8]
+        unique_filename = f"{name}_{unique_suffix}{ext}"
+
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+
+        with open(filepath, 'wb') as f:
+            f.write(binary_data)
+
+        file_url = url_for('static', filename=f'uploads/{unique_filename}')
 
     new_msg = Discussion(
         topic_id=topic_id,
         discussion_user_id=discussion_user.id,
         message=content,
-        image_url=image_url
+        file=file_url
     )
     db.session.add(new_msg)
     db.session.commit()
 
     emit('receive_message', {
         'message': content,
-        'image_url': image_url,
+        'file': file_url,
         'code_hash': discussion_user.code_hash,
         'user_id': current_user.id,
         'created_at': new_msg.created_at.strftime("%H:%M")

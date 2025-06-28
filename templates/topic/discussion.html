@@ -45,7 +45,7 @@
       <div
         class="w-full h-full border-black border-2 rounded-md hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] bg-white"
       >
-        <div href="" class="block cursor-pointer">
+        <div class="block cursor-pointer">
           <article class="w-full h-full">
             <div class="w-full h-1/2 border-black border-b-2 px-2 py-4">
               <p class="font-bold">Discussion</p>
@@ -59,18 +59,37 @@
         </div>
       </div>
 
-      <div class="absolute bottom-14 left-0 right-0 flex justify-center">
+      <div
+        class="absolute bottom-14 left-0 right-0 flex flex-col items-center justify-center"
+      >
+        <div class="mb-2 text-center">
+          <div id="file-name-preview" class="text-sm text-gray-600 mb-1"></div>
+          <div
+            id="error-container"
+            class="text-red-600 font-semibold text-sm"
+          ></div>
+        </div>
         <form id="message-form">
           <div class="flex items-center space-x-2">
             <input
-              class="w-[500px] border-black border-2 p-2.5 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md"
+              class="w-[500px] border-black border-2 p-2.5 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6] rounded-md"
               id="message-input"
+              placeholder="Type your message"
             />
-            <div
-              class="h-12 ml-2 border-black border-2 p-2.5 bg-[#FFA6F6] hover:bg-[#FF79E6] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#FF00C8]"
+
+            <input
+              type="file"
+              id="file-input"
+              class="hidden"
+              accept=".jpg,.jpeg,.png,.pdf,.docx"
+            />
+            <label
+              for="file-input"
+              class="h-12 ml-2 border-black border-2 p-2.5 bg-[#FFA6F6] hover:bg-[#FF79E6] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#FF00C8] cursor-pointer"
             >
               <i data-lucide="file"></i>
-            </div>
+            </label>
+
             <button
               type="submit"
               class="h-12 ml-2 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
@@ -88,122 +107,148 @@
     </script>
 
     <script>
-      const socket = io({
-        transports: ["websocket"],
-      });
-
+      const socket = io({ transports: ["websocket"] });
       const topicId = "{{ topic.id }}";
       const userId = "{{ user.id }}";
 
       socket.emit("join", { topic_id: topicId });
-
       socket.emit("fetch_messages", { topic_id: topicId });
 
       socket.on("all_messages", (grouped) => {
-        const data = Object.entries(grouped).map(([date, messages]) => {
-          return {
-            date: date,
-            messages: messages.map((msg) => ({
-              isRight: msg.user_id == userId,
-              message: msg.message,
-              image_url: msg.image_url,
-              code_hash: msg.code_hash,
-              created_at: msg.created_at,
-            })),
-          };
-        });
-
-        data.sort((a, b) => new Date(a.date) - new Date(b.date));
-
         const discussionContainer = document.getElementById(
           "discussion-container"
         );
         discussionContainer.innerHTML = "";
+        let lastWarrapper = null;
 
-        let lastMessageEl = null;
+        Object.entries(grouped).forEach(([date, messages]) => {
+          const dateHeader = document.createElement("div");
+          dateHeader.className =
+            "text-center font-bold text-gray-700 mt-4 mb-2";
+          dateHeader.innerText = date;
+          discussionContainer.appendChild(dateHeader);
 
-        data.forEach((item) => {
-          item.messages.forEach((msg) => {
-            const messageDiv = document.createElement("div");
-            messageDiv.className = `flex items-start mb-4 ${
-              msg.isRight ? "justify-end" : ""
+          messages.forEach((msg) => {
+            const wrapper = document.createElement("div");
+            wrapper.className = `flex items-start mb-4 ${
+              msg.user_id == userId ? "justify-end" : ""
             }`;
 
-            messageDiv.innerHTML = `
-        <div class="max-w-[70%] min-w-[20%] bg-gray-100 p-3 rounded-xl border-2 border-black">
-          <p class="text-sm font-bold">${msg.code_hash}</p>
-          <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
-            <span>${msg.created_at}</span>
-          </div>
-          ${
-            msg.message
-              ? `<p class="text-sm font-urbanist">${msg.message}</p>`
-              : ""
-          }
-          ${
-            msg.image_url
-              ? `<img src="${msg.image_url}" class="mt-2 max-w-full rounded" />`
-              : ""
-          }
-        </div>
-      `;
+            const fileContent = msg.file
+              ? msg.file.match(/\.(jpeg|jpg|gif|png)$/i)
+                ? `<img src="${msg.file}" class="mb-2 max-w-full rounded" />`
+                : `<a href="${msg.file}" target="_blank" class="text-sm underline text-blue-600 mb-2">View File</a>`
+              : "";
 
-            discussionContainer.appendChild(messageDiv);
-            lastMessageEl = messageDiv;
+            wrapper.innerHTML = `
+              <div class="max-w-[70%] min-w-[20%] bg-gray-100 p-3 rounded-xl border-2 border-black">
+                <p class="text-sm font-bold">${msg.code_hash}</p>
+                <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+                  <span>${msg.created_at}</span>
+                </div>
+                ${fileContent}
+                ${
+                  msg.message
+                    ? `<p class="text-sm font-urbanist">${msg.message}</p>`
+                    : ""
+                }
+              </div>`;
+
+            discussionContainer.appendChild(wrapper);
+            lastWarrapper = wrapper;
           });
         });
 
-        requestAnimationFrame(() => {
-          if (lastMessageEl) {
-            lastMessageEl.scrollIntoView({ behavior: "smooth", block: "end" });
-          }
-        });
+        if (lastWarrapper) {
+          lastWarrapper.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+          });
+        }
       });
 
       socket.on("receive_message", (data) => {
         const discussionContainer = document.getElementById(
           "discussion-container"
         );
+        const wrapper = document.createElement("div");
+        wrapper.className = `flex items-start mb-4 ${
+          data.user_id == userId ? "justify-end" : ""
+        }`;
 
-        console.log(data);
+        const fileContent = data.file
+          ? data.file.match(/\.(jpeg|jpg|gif|png)$/i)
+            ? `<img src="${data.file}" class="mt-2 max-w-full rounded" />`
+            : `<a href="${data.file}" target="_blank" class="text-sm underline text-blue-600">View File</a>`
+          : "";
 
-        discussionContainer.innerHTML += `
-          <div class="flex items-start mb-4 ${
-            data.user_id == userId ? "justify-end" : ""
-          }">
-                  <div
-                    class="max-w-[70%] min-w-[20%] bg-gray-100 p-3 rounded-xl border-2 border-black"
-                  >
-                    <p class="text-sm font-bold">${data.code_hash}</p>
-                    <div
-                      class="flex items-center justify-between text-xs text-gray-500 mb-1"
-                    >
-                      <span>${data.created_at}</span>
-                    </div>
-                    <p class="text-sm font-urbanist">
-                      ${data.message}
-                    </p>
-                  </div>
-                </div>
-        `;
+        wrapper.innerHTML = `
+          <div class="max-w-[70%] min-w-[20%] bg-gray-100 p-3 rounded-xl border-2 border-black">
+            <p class="text-sm font-bold">${data.code_hash}</p>
+            <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+              <span>${data.created_at}</span>
+            </div>
+            ${fileContent}
+            ${
+              data.message
+                ? `<p class="text-sm font-urbanist">${data.message}</p>`
+                : ""
+            }
+          </div>`;
 
-        discussionContainer.scrollTop = discussionContainer.scrollHeight;
+        discussionContainer.appendChild(wrapper);
+        wrapper.scrollIntoView({ behavior: "smooth", block: "end" });
+      });
+
+      const fileInput = document.getElementById("file-input");
+      fileInput.addEventListener("change", () => {
+        const fileName = fileInput.files[0].name;
+        const preview = document.getElementById("file-name-preview");
+        const file = fileInput.files[0];
+        preview.textContent = file ? `📎 File attached: ${fileName}` : "";
       });
 
       const form = document.getElementById("message-form");
       form.addEventListener("submit", (e) => {
         e.preventDefault();
+        const messageInput = document.getElementById("message-input");
+        const fileInput = document.getElementById("file-input");
 
-        const message = document.getElementById("message-input").value;
+        const file = fileInput.files[0];
+        const message = messageInput.value;
 
-        const data = {
-          topic_id: topicId,
-          message: message,
-        };
+        if (!file && !message) return;
 
-        socket.emit("send_message", data);
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            socket.emit("send_message", {
+              topic_id: topicId,
+              message: message,
+              file_data: reader.result,
+              file_name: file.name,
+              file_type: file.type,
+            });
+          };
+          reader.readAsDataURL(file);
+        } else {
+          socket.emit("send_message", {
+            topic_id: topicId,
+            message: message,
+          });
+        }
 
-        document.getElementById("message-input").value = "";
+        const errorBox = document.getElementById("error-container");
+        const preview = document.getElementById("file-name-preview");
+        messageInput.value = "";
+        fileInput.value = "";
+        errorBox.textContent = "";
+        preview.textContent = "";
+      });
+
+      socket.on("message_error", (data) => {
+        const errorBox = document.getElementById("error-container");
+        errorBox.textContent = data.error;
       });
     </script>
   </body>
