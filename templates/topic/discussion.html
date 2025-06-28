@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>STIKOM Topic Form</title>
+    <title>Discussion | STIKOM Topic Form</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Urbanist&display=swap"
@@ -25,81 +25,75 @@
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
   </head>
   <body>
-    <div class="w-[70%] mx-auto py-8 relative min-h-screen">
-      <div class="flex items-center justify-between mb-8">
-        <h1 class="text-3xl font-bold font-inter">Topic</h1>
-        <div class="flex items-center space-x-4">
+    <body class="bg-[#fdfdfd] font-inter">
+      <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col min-h-screen">
+        <div class="flex items-center justify-between mb-6">
+          <h1 class="text-3xl font-bold">Topic</h1>
           <a
             href="{{ url_for('topics') }}"
-            class="h-12 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
-            ><i data-lucide="arrow-left"></i
-          ></a>
+            class="h-10 w-10 flex items-center justify-center border-2 border-black rounded-full bg-[#A6FAFF] hover:bg-[#79F7FF] shadow transition"
+          >
+            <i data-lucide="arrow-left"></i>
+          </a>
         </div>
-      </div>
 
-      <div class="w-[80%] mx-auto mb-8">
-        <h2 class="text-2xl font-bold font-inter mb-4">{{ topic.title }}</h2>
-        <p class="text-gray-700 mb-4 font-urbanist">{{ topic.description }}</p>
-      </div>
-
-      <div
-        class="w-full h-full border-black border-2 rounded-md hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] bg-white"
-      >
-        <div class="block cursor-pointer">
-          <article class="w-full h-full">
-            <div class="w-full h-1/2 border-black border-b-2 px-2 py-4">
-              <p class="font-bold">Discussion</p>
-            </div>
-            <div
-              class="flex-1 overflow-y-auto space-y-4 p-4"
-              id="discussion-container"
-              style="max-height: 400px"
-            ></div>
-          </article>
+        <div class="bg-white border border-black rounded-xl p-4 mb-4 shadow">
+          <h2 class="text-2xl font-semibold mb-2">{{ topic.title }}</h2>
+          <p class="text-gray-700 font-urbanist">{{ topic.description}}</p>
         </div>
-      </div>
 
-      <div
-        class="absolute bottom-14 left-0 right-0 flex flex-col items-center justify-center"
-      >
-        <div class="mb-2 text-center">
-          <div id="file-name-preview" class="text-sm text-gray-600 mb-1"></div>
-          <div
-            id="error-container"
-            class="text-red-600 font-semibold text-sm"
-          ></div>
-        </div>
-        <form id="message-form">
-          <div class="flex items-center space-x-2">
-            <input
-              class="w-[500px] border-black border-2 p-2.5 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6] rounded-md"
-              id="message-input"
-              placeholder="Type your message"
-            />
-
-            <input
-              type="file"
-              id="file-input"
-              class="hidden"
-              accept=".jpg,.jpeg,.png,.pdf,.docx"
-            />
-            <label
-              for="file-input"
-              class="h-12 ml-2 border-black border-2 p-2.5 bg-[#FFA6F6] hover:bg-[#FF79E6] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#FF00C8] cursor-pointer"
-            >
-              <i data-lucide="file"></i>
-            </label>
-
-            <button
-              type="submit"
-              class="h-12 ml-2 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
-            >
-              <i data-lucide="send"></i>
-            </button>
+        <div
+          class="flex-1 grid grid-rows-[auto_1fr_auto] border border-black rounded-xl bg-white overflow-hidden"
+        >
+          <div class="border-b border-black p-4 bg-gray-50">
+            <p class="font-semibold">Discussion</p>
           </div>
-        </form>
+
+          <div
+            id="discussion-container"
+            class="flex-1 overflow-y-auto p-4 space-y-4"
+            style="max-height: 490px"
+          ></div>
+
+          <div class="bg-white px-4 py-3">
+            <div
+              id="file-name-preview"
+              class="text-sm text-gray-600 mb-1"
+            ></div>
+            <div
+              id="error-container"
+              class="text-sm text-red-600 font-semibold mb-2"
+            ></div>
+
+            <form id="message-form" class="flex items-center space-x-2">
+              <input
+                id="message-input"
+                placeholder="Type your message"
+                class="flex-1 border-2 border-black p-2.5 rounded-md focus:outline-none focus:bg-[#FFA6F6] shadow"
+              />
+              <input
+                type="file"
+                id="file-input"
+                class="hidden"
+                accept=".jpg,.jpeg,.png,.pdf,.docx"
+              />
+              <label
+                for="file-input"
+                class="h-10 w-10 flex items-center justify-center border-2 border-black rounded bg-[#FFA6F6] hover:bg-[#FF79E6] shadow cursor-pointer"
+              >
+                <i data-lucide="file"></i>
+              </label>
+              <button
+                type="submit"
+                class="h-10 w-10 flex items-center justify-center border-2 border-black rounded bg-[#A6FAFF] hover:bg-[#79F7FF] shadow"
+              >
+                <i data-lucide="send"></i>
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
-    </div>
+    </body>
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
@@ -120,6 +114,7 @@
         );
         discussionContainer.innerHTML = "";
         let lastWarrapper = null;
+        const messageForm = document.getElementById("message-form");
 
         Object.entries(grouped).forEach(([date, messages]) => {
           const dateHeader = document.createElement("div");
@@ -159,15 +154,28 @@
           });
         });
 
-        if (lastWarrapper) {
-          lastWarrapper.scrollIntoView({
+        requestAnimationFrame(() => {
+          if (lastWarrapper) {
+            setTimeout(() => {
+              lastWarrapper.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+              });
+              messageForm.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+              });
+            }, 100);
+          }
+          messageForm.scrollIntoView({
             behavior: "smooth",
             block: "end",
           });
-        }
+        });
       });
 
       socket.on("receive_message", (data) => {
+        const messageForm = document.getElementById("message-form");
         const discussionContainer = document.getElementById(
           "discussion-container"
         );
@@ -198,6 +206,9 @@
 
         discussionContainer.appendChild(wrapper);
         wrapper.scrollIntoView({ behavior: "smooth", block: "end" });
+        setTimeout(() => {
+          messageForm.scrollIntoView({ behavior: "smooth", block: "end" });
+        }, 50);
       });
 
       const fileInput = document.getElementById("file-input");
