@@ -24,7 +24,7 @@
     </script>
   </head>
   <body>
-    <div class="w-[60%] mx-auto py-8">
+    <div class="md:w-[60%] w-full mx-auto py-8 md:px-0 px-4">
       <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-bold font-inter">Create Topic</h1>
         <div class="flex items-center space-x-4">
@@ -39,7 +39,7 @@
       <form action="" method="POST">
         {{ form.hidden_tag() }}
         <div class="flex flex-col space-y-4">
-          <div class="grid grid-cols-2 gap-4 mb-2">
+          <div class="grid md:grid-cols-2 grid-cols-1 gap-4 mb-2">
             <div class="flex flex-col space-y-2">
               {{ form.title.label() }} {{ form.title(class="w-full border-black
               border-2 p-2.5 focus:outline-none

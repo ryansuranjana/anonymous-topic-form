@@ -9,7 +9,7 @@ from config.setup_database import setup_database
 from forms.auth import RegisterForm, LoginForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from models.user import User
-from flask_login import login_user, login_required, current_user
+from flask_login import login_user, login_required, current_user, logout_user
 from forms.topic import TopicForm
 from models.topic import Topic
 from models.tag import Tag
@@ -63,6 +63,12 @@ def register():
         
         return redirect(url_for('topics'))
     return render_template('auth/register.html', form=form)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 @app.route('/topics', methods=['GET'])
 @login_required
