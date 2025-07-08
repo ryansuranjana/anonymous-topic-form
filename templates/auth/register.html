@@ -25,7 +25,7 @@
   </head>
   <body>
     <div class="w-full h-screen flex items-center justify-center bg-gray-100">
-      <div class="w-[25%]">
+      <div class="md:w-[25%] w-[90%] md:px-0 px-4">
         <div class="flex flex-col items-center mb-6">
           <h1 class="text-xl font-bold font-inter">Sign Up</h1>
           <p class="font-urbanis text-sm">
@@ -36,16 +36,24 @@
         <form action="{{ url_for('register') }}" method="POST">
           {{ form.hidden_tag() }}
           <div class="flex flex-col gap-y-4 mb-6">
-            {{ form.nickname(class="w-96 border-black border-2 p-2.5 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md w-full", placeholder="Nickname") }}
-
-            {{ form.password(class="w-96 border-black border-2 p-2.5 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md w-full", placeholder="Password") }}
-
-            {{ form.confirm_password(class="w-96 border-black border-2 p-2.5 focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-md w-full", placeholder="Confirm Password") }}
+            {{ form.nickname(class="w-96 border-black border-2 p-2.5
+            focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)]
+            focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)]
+            rounded-md w-full", placeholder="Nickname") }} {{
+            form.password(class="w-96 border-black border-2 p-2.5
+            focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)]
+            focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)]
+            rounded-md w-full", placeholder="Password") }} {{
+            form.confirm_password(class="w-96 border-black border-2 p-2.5
+            focus:outline-none focus:shadow-[2px_2px_0px_rgba(0,0,0,1)]
+            focus:bg-[#FFA6F6] active:shadow-[2px_2px_0px_rgba(0,0,0,1)]
+            rounded-md w-full", placeholder="Confirm Password") }}
           </div>
 
-          {{ form.submit(class="h-12 border-black border-2 p-2.5 bg-[#A6FAFF] hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF] rounded-md block text-center w-full") }}
+          {{ form.submit(class="h-12 border-black border-2 p-2.5 bg-[#A6FAFF]
+          hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)]
+          active:bg-[#00E1EF] rounded-md block text-center w-full") }}
         </form>
-
       </div>
     </div>
 

@@ -2,7 +2,7 @@ import eventlet
 eventlet.monkey_patch()
 from flask import Flask
 from dotenv import load_dotenv
-from flask import render_template, url_for, redirect, request
+from flask import render_template, url_for, redirect, request, flash
 from config.db import init_db, db
 from config.auth import init_login
 from config.setup_database import setup_database
@@ -21,6 +21,7 @@ from werkzeug.utils import secure_filename
 import os
 import base64
 import uuid
+import time
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
@@ -48,6 +49,8 @@ def login():
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
             return redirect(url_for('topics'))
+        else:
+            flash("Invalid nickname or password", "error")
     return render_template('auth/login.html', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -157,7 +160,7 @@ def send_message(data):
         discussion_user = DiscussionUser(
             user_id=current_user.id,
             topic_id=topic_id,
-            code_hash=f"usr{current_user.id:04d}"
+            code_hash=f"usr{current_user.id:04d}{int(time.time() * 1000)}"
         )
         db.session.add(discussion_user)
         db.session.commit()
